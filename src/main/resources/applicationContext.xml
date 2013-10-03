@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="odmManager"
+		class="org.springframework.ldap.odm.core.impl.OdmManagerImplFactoryBean">
+		<property name="converterManager" ref="converterManager" />
+		<property name="contextSource" ref="contextSource" />
+		<property name="managedClasses">
+			<set>
+				<value>model.Service</value>
+				<value>model.Endpoint</value>
+				<value>model.Policy</value>
+			</set>
+		</property>
+	</bean>
+
+  <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+      <property name="url" value="ldap://localhost:389" />
+      <property name="base" value="GLUE2GroupID=grid" />
+      <property name="userDn" value="cn=Manager,GLUE2GroupID=grid" />
+      <property name="password" value="passwd" />
+   </bean>
+
+	<bean id="fromStringConverter" class="org.springframework.ldap.odm.typeconversion.impl.converters.FromStringConverter" />
+	<bean id="toStringConverter" class="org.springframework.ldap.odm.typeconversion.impl.converters.ToStringConverter" />
+	<bean id="converterManager" class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean">
+		<property name="converterConfig">
+			<set>
+				<bean class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean$ConverterConfig">
+					<property name="fromClasses">
+						<set>
+							<value>java.lang.String</value>
+						</set>
+					</property>
+					<property name="toClasses">
+						<set>
+							<value>java.lang.Byte</value>
+							<value>java.lang.Short</value>
+							<value>java.lang.Integer</value>
+							<value>java.lang.Long</value>
+							<value>java.lang.Float</value>
+							<value>java.lang.Double</value>
+							<value>java.lang.Boolean</value>
+							<value>java.util.Date</value>
+						</set>
+					</property>
+					<property name="converter" ref="fromStringConverter" />
+				</bean>
+				<bean class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean$ConverterConfig">
+					<property name="fromClasses">
+						<set>
+							<value>java.lang.Byte</value>
+							<value>java.lang.Short</value>
+							<value>java.lang.Integer</value>
+							<value>java.lang.Long</value>
+							<value>java.lang.Float</value>
+							<value>java.lang.Double</value>
+							<value>java.lang.Boolean</value>
+							<value>java.util.Date</value>
+						</set>
+					</property>
+					<property name="toClasses">
+						<set>
+							<value>java.lang.String</value>
+						</set>
+					</property>
+					<property name="converter" ref="toStringConverter" />
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+</beans>
